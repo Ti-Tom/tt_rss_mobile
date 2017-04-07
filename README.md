@@ -1,12 +1,13 @@
-TTRSS Mobile
+TT-RSS Mobile
 ==============
 
 Simple [Tiny Tiny RSS](https://tt-rss.org) plugin for mobile display based on [bootstrap](http://getbootstrap.com).
+
 But, i'm not sure it's the better way to do this.
 
 ## Install
 
-Download zip and unzip or clone repository in plugins directory of your TT-RSS install.
+Download zip and unzip or clone repository in plugins directory of your TT-RSS install (`plugins/tt_rss_mobile`).
 
 ## Configuration
 
@@ -17,6 +18,7 @@ In TT-RSS configuration, enable `tt_rss_mobile`.
 - [x] Login page
 - [x] Logout
 - [x] List feeds
+- [ ] List feeds by category
 - [x] List unread articles
 - [ ] Add action for marking all articles of feed as read
 - [ ] Add action on feed for display articles read
