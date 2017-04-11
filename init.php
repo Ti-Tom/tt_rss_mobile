@@ -26,19 +26,14 @@ class Tt_Rss_Mobile extends Plugin {
 				$host->add_handler("mobile", "refresh", $this);
 				if($op == 'mobile'){
 					$method = isset($_REQUEST["method"])?$_REQUEST["method"]:null;
-					$handler = new API($_REQUEST);
+					$handler = new Handler_Public();
 					switch($method){
 						default:
 						case 'index':
 							$feeds = $articles = array();
 							if($_SESSION['uid']){
 								login_sequence();
-								ob_start();
-								$handler->getFeeds();
-								$feeds = ob_get_contents();
-								ob_end_clean();
-								$feeds = json_decode($feeds,true);
-								$feeds = isset($feeds['content'])?$feeds['content']:array();
+								$feeds = $this->getFeeds();
 
 								if(!empty($_REQUEST['fid'])){
 									$articles = $this->loadArticle($_REQUEST['fid']);
@@ -61,7 +56,7 @@ class Tt_Rss_Mobile extends Plugin {
 							header('Location: backend.php?op=mobile');
 							exit;
 							break;
-						case 'refresh':
+						/*case 'refresh':
 							if($_SESSION['uid']){
 								if(empty($_REQUEST['fid'])){
 									ob_start();
@@ -84,7 +79,7 @@ class Tt_Rss_Mobile extends Plugin {
 									exit;
 								}
 							}
-							break;
+							break;*/
 						case 'load':
 							ob_clean();
 							if($_SESSION['uid'] && !empty($_REQUEST['fid']) && !empty($_REQUEST['p'])){
@@ -147,6 +142,40 @@ class Tt_Rss_Mobile extends Plugin {
 		header("Content-type: text/html; charset=utf-8");
 		include dirname(__FILE__)."/index.php";
 		die();
+	}
+
+	function getFeeds(){
+		$db = Db::get();
+		// TODO: categories
+		$query = "SELECT id, feed_url, cat_id, title, order_id, ".
+				SUBSTRING_FOR_DATE."(last_updated,1,19) AS last_updated
+				FROM ttrss_feeds
+				WHERE owner_uid = " . $_SESSION["uid"] .
+				" ORDER BY cat_id, title ";
+		$result = $db->query($query);
+		$feeds = array();
+		if ($db->num_rows($result) != 0) {
+			while ($line = $db->fetch_assoc($result)) {
+				$unread = getFeedUnread($line["id"]);
+
+				$has_icon = feed_has_icon($line['id']);
+
+				if ($unread || !$unread_only) {
+
+					$feeds[] = array(
+						"feed_url" => $line["feed_url"],
+						"title" => $line["title"],
+						"id" => (int)$line["id"],
+						"unread" => (int)$unread,
+						"has_icon" => $has_icon,
+						"cat_id" => (int)$line["cat_id"],
+						"last_updated" => (int) strtotime($line["last_updated"]),
+						"order_id" => (int) $line["order_id"],
+					);
+				}
+			}
+		}
+		return $feeds;
 	}
 
 	function loadArticle($idFeed,$page = 0, $limit = 20){
