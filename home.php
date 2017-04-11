@@ -30,7 +30,7 @@ $nbElem = 0;
 	</div>
 </div>
 <div class="row <?= empty($_REQUEST['fid'])?'hidden':''; ?>" id="list-articles">
-	<div style="background-color: #FFFFFF;width: 100%;">
+	<div style="background-color: #FFFFFF;width: 100%;" data-spy="affix" data-offset-top="0">
 		<h4>
 			<!-- Open menu bar -->
 			<button id="open-menu" class="btn btn-default pull-left btn-sm" style="margin-right: 10px;"><i class="glyphicon glyphicon-menu-hamburger"></i></button>
@@ -92,9 +92,7 @@ $(document).ready(function(){
 			}
 		});
 	}
-	$('#list-articles').promise().done(function(){
-		$('.panel-body a',$(this)).attr('target','_blank');
-	});
+	$('#list-articles .panel-body a').attr('target','_blank');
 });
 </script>
 <style type="text/css" media="all">

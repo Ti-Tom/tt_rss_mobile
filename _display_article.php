@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-	<div class="panel-heading" role="tab" id="h-<?= $a['id']; ?>" data-spy="affix" data-offset-top="0">
+	<div class="panel-heading" role="tab" id="h-<?= $a['id']; ?>">
 		<!-- Actions -->
 		<div class="btn-group pull-right">
 			<button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-option-vertical"></i></span>
