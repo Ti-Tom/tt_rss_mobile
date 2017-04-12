@@ -224,9 +224,6 @@ class Tt_Rss_Mobile extends Plugin {
 			if ($db->num_rows($result) != 0) {
 
 				while ($line = $db->fetch_assoc($result)) {
-					$doc = new DOMDocument();
-					@$doc->loadHTML($line['content']);
-					$line['content'] = $doc->saveHTML();
 					$articles[] = $line;
 				}
 			}
