@@ -88,7 +88,8 @@ $(document).ready(function(){
 					success: function(d){
 						p++;
 						$('#feed-<?= empty($_REQUEST['fid'])?'':$_REQUEST['fid']; ?>').append(d);
-						$('#feed-<?= empty($_REQUEST['fid'])?'':$_REQUEST['fid']; ?> .panel-body a[target!="_blank"]').attr('target','_blank');
+						$('#list-articles .panel-body a[target!="_blank"]').attr('target','_blank');
+						$('#list-articles .panel-body img').css('max-width','100%');
 						running = false;
 					}
 				});
@@ -96,6 +97,7 @@ $(document).ready(function(){
 		});
 	}
 	$('#list-articles .panel-body a').attr('target','_blank');
+	$('#list-articles .panel-body img').css('max-width','100%');
 	$('#list-articles div[data-spy="affix"]:first').css('width',$('.container').innerWidth());
 	window.addEventListener("resize", function() {
 		$('#list-articles div[data-spy="affix"]:first').css('width',$('.container').innerWidth());
