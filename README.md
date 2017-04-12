@@ -13,6 +13,8 @@ Download zip and unzip or clone repository in plugins directory of your TT-RSS i
 
 In TT-RSS configuration, enable `tt_rss_mobile`.
 
+Set tt_rss_mobile in `PLUGINS` (config.php).
+
 ## TODO
 
 - [x] Login page
