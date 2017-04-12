@@ -97,7 +97,7 @@ $(document).ready(function(){
 	}
 	$('#list-articles .panel-body a').attr('target','_blank');
 	$('#list-articles div[data-spy="affix"]:first').css('width',$('.container').innerWidth());
-	window.addEventListener("orientationchange", function() {
+	window.addEventListener("resize", function() {
 		$('#list-articles div[data-spy="affix"]:first').css('width',$('.container').innerWidth());
 	});
 	<?php if(!empty($articles)): ?>
