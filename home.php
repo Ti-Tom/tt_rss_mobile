@@ -97,6 +97,9 @@ $(document).ready(function(){
 	}
 	$('#list-articles .panel-body a').attr('target','_blank');
 	$('#list-articles div[data-spy="affix"]:first').css('width',$('.container').innerWidth());
+	window.addEventListener("orientationchange", function() {
+		$('#list-articles div[data-spy="affix"]:first').css('width',$('.container').innerWidth());
+	});
 	<?php if(!empty($articles)): ?>
 		$('#list-articles .panel-heading li[class!="disabled"]').delegate('.article-read','click',function(){
 			var lk = $(this);
