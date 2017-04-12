@@ -15,13 +15,16 @@ $nbElem = 0;
 			<a href="backend.php?op=mobile&method=logout" class="btn btn-danger pull-right btn-sm"><i class="glyphicon glyphicon-off"></i></a>
 		</div>
 		<?php foreach($feeds as $f): ?>
-		<?php if(!empty($_REQUEST['fid']) && $_REQUEST['fid'] == $f['id']){
+		<?php
+		$url = "backend.php?op=mobile&fid=".$f['id'];
+		if(!empty($_REQUEST['fid']) && $_REQUEST['fid'] == $f['id']){
 			$h1 = $f['title'];
 			$ico = $f['has_icon']?(ICONS_DIR . "/".$f['id'].".ico"):'images/feed.png';
 			$nbElem = $f['unread'];
 			$lk = $f['feed_url'];
+			$url = "javascript:void(0);\" onclick=\"javascript:$('#list-articles').removeClass('hidden');$('#list-feeds').addClass('hidden');\"";
 		} ?>
-		<a href="backend.php?op=mobile&fid=<?= $f['id']; ?>" class="list-group-item <?= !empty($_REQUEST['fid']) && $_REQUEST['fid'] == $f['id']?'active':'' ; ?>">
+		<a href="<?= $url; ?>" class="list-group-item <?= !empty($_REQUEST['fid']) && $_REQUEST['fid'] == $f['id']?'active':'' ; ?>">
 			<img class="pull-left img-responsive" alt="<?= addslashes($f['title']); ?>" style="width:16px; margin-right: 10px;margin-top: 2px;" src="<?= $f['has_icon']?(ICONS_DIR . "/".$f['id'].".ico"):'images/feed.png'; ?>">
 			<span><?= $f['title']; ?></span>
 			<span class="badge"><?= $f['unread']; ?></span>
@@ -30,7 +33,7 @@ $nbElem = 0;
 	</div>
 </div>
 <div class="row <?= empty($_REQUEST['fid'])?'hidden':''; ?>" id="list-articles">
-	<div style="background-color: #FFFFFF;width: 100%;" data-spy="affix" data-offset-top="0">
+	<div style="background-color: #FFFFFF;width: 100%;" data-spy="affix" data-offset-top="10">
 		<h4>
 			<!-- Open menu bar -->
 			<button id="open-menu" class="btn btn-default pull-left btn-sm" style="margin-right: 10px;"><i class="glyphicon glyphicon-menu-hamburger"></i></button>
@@ -43,9 +46,9 @@ $nbElem = 0;
 				<ul class="dropdown-menu">
 					<li><a href="<?= $lk; ?>" target="_blank"><i class="glyphicon glyphicon-new-window"></i> <?= __('Link'); ?></a></li>
 					<?php if(empty($articles)): ?>
-						<li class="disabled"><a href="javascript:void(0);"><i class="glyphicon glyphicon-unchecked"></i> <?= __('mark feed as read'); ?></a></li>
+						<li class="disabled"><a href="javascript:voi(0);"><i class="glyphicon glyphicon-unchecked"></i> <?= __('mark feed as read'); ?></a></li>
 					<?php else: ?>
-						<li><a href="#"><i class="glyphicon glyphicon-unchecked"></i> <?= __('mark feed as read'); ?></a></li>
+						<li><a href="backend.php?op=mobile&method=markfeedread&fid=<?= $_REQUEST['fid']; ?>"><i class="glyphicon glyphicon-unchecked"></i> <?= __('mark feed as read'); ?></a></li>
 					<?php endif; ?>
 				</ul>
 			</div>
@@ -93,6 +96,21 @@ $(document).ready(function(){
 		});
 	}
 	$('#list-articles .panel-body a').attr('target','_blank');
+	$('#list-articles div[data-spy="affix"]:first').css('width',$('.container').innerWidth());
+	<?php if(!empty($articles)): ?>
+		$('#list-articles .panel-heading li[class!="disabled"]').delegate('.article-read','click',function(){
+			var lk = $(this);
+			$.ajax({
+				method: "GET",
+				url: "backend.php?op=mobile&method=markarticleread&fid=<?= empty($_REQUEST['fid'])?'':$_REQUEST['fid']; ?>&aid="+$(this).attr('data-id'),
+				success: function(d){
+					$(lk).parent().addClass('disabled');
+					$(lk).removeClass('article-read');
+					$('#list-feeds .list-group-item.active .badge').text(parseInt($('#list-feeds .list-group-item.active .badge').text())-1);
+				}
+			});
+		});
+	<?php endif; ?>
 });
 </script>
 <style type="text/css" media="all">

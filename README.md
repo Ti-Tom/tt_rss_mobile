@@ -20,11 +20,11 @@ In TT-RSS configuration, enable `tt_rss_mobile`.
 - [x] List feeds
 - [ ] List feeds by category
 - [x] List unread articles
-- [ ] Add action for marking all articles of feed as read
+- [x] Add action for marking all articles of feed as read
 - [ ] Add action on feed for display articles read
-- [ ] Add action for marking article as (un)read
+- [x] Add action for marking article as read
 - [ ] When opening article, mark it as read
-- [ ] When article is mark as read, update counter (menu)
+- [x] When article is mark as read, update counter (menu)
 - [ ] Add share options on article: Mail, Pinterest, Owncloud, Pocket, Twitter, Identica, Google+, etc...
 - [ ] Do more ?
 

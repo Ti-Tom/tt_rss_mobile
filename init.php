@@ -91,6 +91,23 @@ class Tt_Rss_Mobile extends Plugin {
 							}
 							die();
 							break;
+						case 'markfeedread':
+							if($_SESSION['uid']&& !empty($_REQUEST['fid'])){
+								login_sequence();
+								$this->markFeedHasRead($_REQUEST['fid']);
+							}
+							header('Location: backend.php?op=mobile');
+							exit;
+							break;
+						case 'markarticleread':
+							ob_clean();
+							if($_SESSION['uid'] && !empty($_REQUEST['fid']) && !empty($_REQUEST['aid'])){
+								login_sequence();
+								$this->markArticleHasRead($_REQUEST['fid'],$_REQUEST['aid']);
+							}
+							die();
+							break;
+
 					}
 				}elseif(empty($op)){
 					header('Location: backend.php?op=mobile');
@@ -196,19 +213,55 @@ class Tt_Rss_Mobile extends Plugin {
 				AND ue.owner_uid = ".$_SESSION["uid"]."
 				AND ue.unread = 1 
 				GROUP BY e.guid 
-				ORDER BY e.updated DESC 
-				LIMIT ".($page*$limit).",".$limit." ";
+				ORDER BY e.updated DESC";
+			if($limit > 0){
+				$page = $page>=0?$page:0;
+				$query .= " LIMIT ".($page*$limit).",".$limit." ";
+			}
 
 			$result = $db->query($query);
 
 			if ($db->num_rows($result) != 0) {
 
 				while ($line = $db->fetch_assoc($result)) {
+					$doc = new DOMDocument();
+					@$doc->loadHTML($line['content']);
+					$line['content'] = $doc->saveHTML();
 					$articles[] = $line;
 				}
 			}
 		}
 		return $articles;
+	}
+
+	function markFeedHasRead($idFeed){
+		$db = Db::get();
+		$feeds = $this->getFeeds();
+		$query = "UPDATE ttrss_user_entries
+				SET unread = 0
+				WHERE owner_uid = ".$_SESSION["uid"]."
+				AND feed_id = ".$db->escape_string($idFeed);
+		$db->query($query);
+		$f = current($feeds);
+		while($f !== false){
+			if($redirect){
+				header('Location: backend.php?op=mobile&fid='.$f['id']);
+				exit;
+			}elseif($f['id'] = $idFeed){
+				$redirect = true;
+			}
+			$f = next($feeds);
+		}
+	}
+
+	function markArticleHasRead($idFeed, $idArticle){
+		$db = Db::get();
+		$query = "UPDATE ttrss_user_entries
+				SET unread = 0
+				WHERE owner_uid = ".$_SESSION["uid"]."
+				AND feed_id = ".$db->escape_string($idFeed)."
+				AND ref_id = ".$db->escape_string($idArticle);
+		$db->query($query);
 	}
 
 	function get_js() {

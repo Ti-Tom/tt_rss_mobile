@@ -6,7 +6,7 @@
 			</button>
 			<ul class="dropdown-menu">
 				<li><a href="<?= $a['link']; ?>" target="_blank"><i class="glyphicon glyphicon-new-window"></i> <?= __('Link'); ?></a></li>
-				<li><a href="#"><i class="glyphicon glyphicon-unchecked"></i> <?= __('Mark as read'); ?></a></li>
+				<li><a href="javascript:void(0);" class="article-read" data-id="<?= $a['id']; ?>"><i class="glyphicon glyphicon-unchecked"></i> <?= __('Mark as read'); ?></a></li>
 				<li class="hidden"><a href="#"><i class="glyphicon glyphicon-unchecked"></i> <?= __('Mark as unread'); ?></a></li>
 				<?php /* ADD options: share by example
 				<li role="separator" class="divider"></li>
