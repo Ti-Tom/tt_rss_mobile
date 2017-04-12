@@ -19,5 +19,6 @@
 	</div>
 	<div class="panel-collapse collapse" aria-labelledby="h-<?= $a['id']; ?>" role="tabpanel" id="a-<?= $a['id']; ?>">
 		<div class="panel-body"><?= $a['content']; ?></div>
+		<div class="panel-footer text-right"><?= date('Y-m-d H:i:s',strtotime($a['updated'])); ?></div>
 	</div>
 </div>
